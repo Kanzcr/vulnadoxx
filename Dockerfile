@@ -1,8 +1,9 @@
-FROM openjdk:8
+FROM eclipse-temurin:8-jdk
 
-RUN apt-get update && \
-    apt-get install build-essential maven default-jdk cowsay netcat -y && \
-    update-alternatives --config javac
-COPY . .
+WORKDIR /app
 
-CMD ["mvn", "spring-boot:run"]
+COPY target/vulnado-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
