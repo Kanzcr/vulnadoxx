@@ -31,7 +31,7 @@ pipeline {
                 script {
                     def imageName = "kanzcr/vulnadoxx:latest"
                     bat "docker build -t ${imageName} ."
-                    withCredentials([usernamePassword(credentialsId: 'Kanzcr', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
     bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
 }
 withCredentials([usernamePassword(credentialsId: 'dockerhub-pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
