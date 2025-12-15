@@ -26,18 +26,20 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Build & Push') {
             steps {
                 script {
                     def imageName = "kanzcr/vulnadoxx:latest"
                     bat "docker build -t ${imageName} ."
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-    bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
-}
-withCredentials([usernamePassword(credentialsId: 'dockerhub-pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-    bat "echo Username: %DOCKER_USER%"
-    bat "echo Password: %DOCKER_PASS%"
-}
+
+                    withCredentials([usernamePassword(
+                        credentialsId: 'dockerhub-pass', // ID credential di Jenkins
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )]) {
+                        bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                        bat "docker push ${imageName}"
+                    }
                 }
             }
         }
