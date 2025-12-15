@@ -26,15 +26,17 @@ pipeline {
             }
         }
 
-        // stage('Docker Build') {
-        //     steps {
-        //         script {
-        //             def imageName = "kanzcr/vulnadoxx:latest"
-        //             bat "docker build -t ${imageName} ."
-        //             bat "docker login -u kanzcr -p ${env.DOCKERHUB_PASSWORD}"
-        //         }
-        //     }
-        // }
+        stage('Docker Build') {
+            steps {
+                script {
+                    def imageName = "kanzcr/vulnadoxx:latest"
+                    bat "docker build -t ${imageName} ."
+                    withCredentials([usernamePassword(credentialsId: 'Kanzcr', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+    bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+}
+                }
+            }
+        }
     }
 
     post {
